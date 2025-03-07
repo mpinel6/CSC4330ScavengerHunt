@@ -64,6 +64,7 @@ flutter:
     - images/Tiger_marker.png
     - images/article1.png
     - images/article2.png
+    - images/article3.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

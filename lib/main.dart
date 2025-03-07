@@ -26,9 +26,9 @@ class _MapImagePageState extends State<MapImagePage> {
 
   // Positions for button placement at different levels
   final List<Offset> positions = [
-    Offset(100, 100),
-    Offset(200, 150),
-    Offset(300, 250),
+    Offset(150, 260),
+    Offset(420, 240),
+    Offset(1350, 240),
   ];
 
   // Articles corresponding to each level
@@ -36,13 +36,25 @@ class _MapImagePageState extends State<MapImagePage> {
     {
       "image": "images/article1.png",
       "text": "Beyond the towering gates of Patrick F. Taylor Hall, a fortress of knowledge and innovation, lies a passage oft traversed by weary scholars and wandering minds alike. The grand archway beckons all who seek wisdom, but before one may delve into the depths of its scholarly halls, a test of perception must be met.\n\n"
-          "At the threshold, the scent of freshly baked bread and the aroma of roasted coffee linger in the air—a merchant’s haven set upon the very entrance to the keep. It is here, within the confines of this bustling outpost, that many weary travelers find solace before embarking upon their academic quests. The merchants of Panera, as they are known, offer sustenance and warmth, a momentary respite before the trials that await.\n\n"
-          "To proceed beyond this humble sanctuary, one must recall the **most common fare** sought by scholars and adventurers alike. The offering exchanged more than any other, **found upon the great menu board**, bears a number of great significance. Seek ye the first item, oft chosen, and only then shall the next path be revealed.\n\n"
-          "**(Hint: The first item listed on the great menu of Panera is a clue.)**\n\n"
-          "Enter the number of this offering and prove thy worth.",
-      "code": "101" // Example code based on Panera's top-selling item (e.g., a meal number)
+              "At the threshold, the scent of freshly baked bread and the aroma of roasted coffee linger in the air—a merchant’s haven set upon the very entrance to the keep. It is here, within the confines of this bustling outpost, that many weary travelers find solace before embarking upon their academic quests. The merchants of Panera, as they are known, offer sustenance and warmth, a momentary respite before the trials that await.\n\n"
+              "To proceed beyond this humble sanctuary, one must recall the **most common fare** sought by scholars and adventurers alike. The offering exchanged more than any other, **found upon the great menu board**, bears a number of great significance. Seek ye the first item, oft chosen, and only then shall the next path be revealed.\n\n"
+              "**(Hint: The first item listed on the great menu of Panera is a clue.)**\n\n"
+              "Enter the number of this offering and prove thy worth.",
+      "code": "101"
     },
-    {"image": "images/article2.png", "text": "This is the second article.", "code": "5678"},
+    {
+      "image": "images/article2.png",
+      "text": "**H**idden within these halls lies a space unlike any other, a sanctuary for those who seek both respite and camaraderie.\n\n"
+              "**E**very scholar, knight, and traveler who walks these grounds finds themselves drawn to its warmth.\n\n"
+              "**Y**ou will find here not only sustenance, but a place where knowledge and fellowship intertwine.\n\n"
+              "**T**his atrium space is aptly named **“The Commons”**, serving as the **main gathering space** for all within the fortress of learning.\n\n"
+              "**I**t is a place of many faces, where students and adventurers pause between their quests, seeking nourishment for both body and mind.\n\n"
+              "**G**uardians of knowledge, the wise keepers of the **Dow Student Leadership Incubator**, watch over this hall, ensuring that the legacies of more than **40 student guilds** endure.\n\n"
+              "**E**very whisper and echo here tells of great minds meeting, ideas forming, and futures being shaped.\n\n"
+              "**R**emember, traveler—the key lies not in the words themselves, but in their beginning.\n\n"
+              "Only those who grasp this truth may proceed beyond this hall.",
+      "code": "HEYTIGER"
+    },
     {"image": "images/article3.png", "text": "This is the final article.", "code": "9012"},
   ];
 
@@ -98,7 +110,11 @@ class _MapImagePageState extends State<MapImagePage> {
                   ),
                 );
                 if (result == true) {
-                  unlockNextLevel();
+                  setState(() {
+                    if (currentLevel < articles.length - 1) {
+                      currentLevel++;
+                    }
+                  });
                 }
               },
               child: Image.asset(
