@@ -1,4 +1,4 @@
-# scavengerhutn
+# scavengerhunt
 
 A new Flutter project.
 
