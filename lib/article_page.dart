@@ -23,18 +23,14 @@ class _ArticlePageState extends State<ArticlePage> {
   String message = "";
 
   void _checkCode() {
-    if (_codeController.text == widget.correctCode) {
-      Navigator.pop(context, true);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => BlankPage()), // Now opens blank_page.dart
-      );
-    } else {
-      setState(() {
-        message = "Incorrect code. Try again.";
-      });
-    }
+  if (_codeController.text == widget.correctCode) {
+    Navigator.pop(context, true); // Only close the page, don't call BlankPage
+  } else {
+    setState(() {
+      message = "Incorrect code. Try again.";
+    });
   }
+}
 
   @override
   Widget build(BuildContext context) {

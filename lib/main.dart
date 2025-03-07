@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scavengerhutn/article_page.dart';
+import 'package:scavengerhutn/blank_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,22 +25,32 @@ class MapImagePage extends StatefulWidget {
 class _MapImagePageState extends State<MapImagePage> {
   int currentLevel = 0;
 
-  final List<Offset> positions = [
-    Offset(150, 260),
-    Offset(420, 240),
-    Offset(1350, 240),
+  // Map image dimensions
+  final double mapWidth = 2000; 
+  final double mapHeight = 800;
+
+  // Relative positions for buttons & markers
+  final List<Offset> relativePositions = [
+    Offset(0.08, 0.26),
+    Offset(0.22, 0.24),
+    Offset(0.7, 0.24),
   ];
 
-  final List<Offset> tigerPositions = [
-    Offset(130, 335),  
-    Offset(470, 270), 
-    Offset(1400, 250), 
-    Offset(1400, 250) 
+  final List<Offset> relativeTigerPositions = [
+    Offset(0.055, 0.3),
+    Offset(0.20, 0.28),
+    Offset(0.75, 0.28),
+    Offset(0.8, 0.55),
   ];
 
-  Offset get buttonPosition => positions[currentLevel];
+  // Get dynamic positions
+  Offset get buttonPosition => Offset(
+        relativePositions[currentLevel].dx * mapWidth,
+        relativePositions[currentLevel].dy * mapHeight,
+      );
 
-  Offset tigerPosition = Offset(130, 335);
+  Offset tigerPosition = Offset(0.055 * 2000, 0.3 * 800);
+  final ScrollController _scrollController = ScrollController();
 
   final List<Map<String, String>> articles = [
     {
@@ -73,86 +84,105 @@ class _MapImagePageState extends State<MapImagePage> {
               "Those who seek to progress must count not the achievements displayed, nor the scholars who gather, but rather the lifelines that fuel the very foundation of this place. Hidden in plain sight, the answer lies before you.\n\n"
               "Only those who truly observe will unveil the secret held within these steps.",
       "code": "15"
-    }
+    },
   ];
 
-  void unlockNextLevel() {
+  void unlockNextLevel() async {
+  if (currentLevel < relativePositions.length - 1) {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BlankPage()), // Wait for BlankPage to close
+    ); 
+
     setState(() {
-      if (currentLevel < positions.length - 1) {
-        tigerPosition = tigerPositions[currentLevel + 1]; // Move tiger to new position
-        currentLevel++;
-      } else {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("Congratulations!"),
-            content: Text("You've unlocked all articles!"),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text("OK"),
-              ),
-            ],
-          ),
-        );
-      }
+      currentLevel++;
+      tigerPosition = Offset(
+        relativeTigerPositions[currentLevel].dx * mapWidth,
+        relativeTigerPositions[currentLevel].dy * mapHeight,
+      );
     });
+  } else {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Congratulations!"),
+        content: Text("You've unlocked all articles!"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('PFT Scavenger Hunt')),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'images/map_image.png',
-              fit: BoxFit.cover,
-            ),
-          ),
+      body: Scrollbar(
+        controller: _scrollController,
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Container(
+            width: mapWidth,
+            height: mapHeight,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    'images/map_image.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
 
-          // Animated Tiger Marker (Custom Assigned Positions)
-          AnimatedPositioned(
-            duration: Duration(seconds: 1),
-            curve: Curves.easeInOut,
-            left: tigerPosition.dx - 20,
-            top: tigerPosition.dy - 40,
-            child: Image.asset(
-              'images/Tiger_marker.png',
-              width: 80,
-              height: 80,
-            ),
-          ),
+                AnimatedPositioned(
+                  duration: Duration(seconds: 2),
+                  curve: Curves.easeInOut,
+                  left: tigerPosition.dx,
+                  top: tigerPosition.dy,
+                  child: Image.asset(
+                    'images/Tiger_marker.png',
+                    width: 80,
+                    height: 80,
+                  ),
+                ),
 
-          // Image Button
-          Positioned(
-            left: buttonPosition.dx,
-            top: buttonPosition.dy,
-            child: GestureDetector(
-              onTap: () async {
-                bool result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ArticlePage(
-                      articleImage: articles[currentLevel]["image"]!,
-                      articleText: articles[currentLevel]["text"]!,
-                      correctCode: articles[currentLevel]["code"]!,
+                Positioned(
+                  left: buttonPosition.dx,
+                  top: buttonPosition.dy,
+                  child: GestureDetector(
+                    onTap: () async {
+                      bool result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ArticlePage(
+                            articleImage: articles[currentLevel]["image"]!,
+                            articleText: articles[currentLevel]["text"]!,
+                            correctCode: articles[currentLevel]["code"]!,
+                          ),
+                        ),
+                      );
+                      if (result == true) {
+                        unlockNextLevel();
+                      }
+                    },
+                    child: Image.asset(
+                      'images/button_image.png',
+                      width: 150,
+                      height: 150,
                     ),
                   ),
-                );
-                if (result == true) {
-                  unlockNextLevel();
-                }
-              },
-              child: Image.asset(
-                'images/button_image.png',
-                width: 150,
-                height: 150,
-              ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
