@@ -33,18 +33,18 @@ class _ArticlePageState extends State<ArticlePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Unlock the Next Level')),
+      appBar: AppBar(title: Text('Location Article')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start, 
           children: [
             Image.asset(widget.articleImage, width: double.infinity, height: 200, fit: BoxFit.cover),
             SizedBox(height: 16),
             RichText(
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left, 
               text: TextSpan(
-                style: TextStyle(fontSize: 18, color: Colors.black),
+                style: TextStyle(fontSize: 18, color: Colors.black, height: 1.5), 
                 children: _formatArticleText(widget.articleText),
               ),
             ),
@@ -55,8 +55,7 @@ class _ArticlePageState extends State<ArticlePage> {
                 labelText: 'Enter Unlock Code',
                 border: OutlineInputBorder(),
               ),
-              keyboardType: TextInputType.number,
-              obscureText: true,
+              keyboardType: TextInputType.text,
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -74,25 +73,28 @@ class _ArticlePageState extends State<ArticlePage> {
     );
   }
 
-  /// Formats text with bold markers (`**bold**`)**
   List<TextSpan> _formatArticleText(String text) {
     List<TextSpan> spans = [];
-    RegExp exp = RegExp(r'\*\*(.*?)\*\*'); // Matches **bold text**
+    RegExp exp = RegExp(r'\*\*(.*?)\*\*');
     Iterable<RegExpMatch> matches = exp.allMatches(text);
 
     int lastIndex = 0;
     for (RegExpMatch match in matches) {
       if (match.start > lastIndex) {
-        spans.add(TextSpan(text: text.substring(lastIndex, match.start))); // Normal text
+        String normalText = text.substring(lastIndex, match.start);
+        normalText = normalText.replaceAll('\n', '\n\t');
+        spans.add(TextSpan(text: '\t' + normalText)); 
       }
       spans.add(TextSpan(
-        text: match.group(1), // Bold text
+        text: match.group(1),
         style: TextStyle(fontWeight: FontWeight.bold),
       ));
       lastIndex = match.end;
     }
     if (lastIndex < text.length) {
-      spans.add(TextSpan(text: text.substring(lastIndex))); // Remaining normal text
+      String remainingText = text.substring(lastIndex);
+      remainingText = remainingText.replaceAll('\n', '\n\t');
+      spans.add(TextSpan(text: '\t' + remainingText));
     }
 
     return spans;
