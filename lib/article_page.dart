@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scavengerhutn/blank_page.dart'; // Import the new blank page
 
 class ArticlePage extends StatefulWidget {
   final String articleImage;
@@ -24,6 +25,10 @@ class _ArticlePageState extends State<ArticlePage> {
   void _checkCode() {
     if (_codeController.text == widget.correctCode) {
       Navigator.pop(context, true);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => BlankPage()), // Now opens blank_page.dart
+      );
     } else {
       setState(() {
         message = "Incorrect code. Try again.";
@@ -36,15 +41,13 @@ class _ArticlePageState extends State<ArticlePage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Image (Parchment-Style)
           Positioned.fill(
             child: Image.asset(
-              'images/background_image.png', // Add a parchment-like texture
+              'images/background_image.png',
               fit: BoxFit.cover,
             ),
           ),
 
-          // Main Content
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -60,7 +63,6 @@ class _ArticlePageState extends State<ArticlePage> {
 
                 SizedBox(height: 16),
 
-                // Article Image (Large Display)
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.asset(
@@ -73,7 +75,6 @@ class _ArticlePageState extends State<ArticlePage> {
 
                 SizedBox(height: 16),
 
-                // Handwritten Style Article Text with Bold Formatting
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -93,15 +94,13 @@ class _ArticlePageState extends State<ArticlePage> {
                   ),
                 ),
 
-                // Decorative Footer Image
                 Image.asset(
-                  'images/divider.png', // Another decorative divider
+                  'images/divider.png',
                   width: 300,
                 ),
 
                 SizedBox(height: 12),
 
-                // Code Entry Field
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white70,
@@ -122,11 +121,10 @@ class _ArticlePageState extends State<ArticlePage> {
 
                 SizedBox(height: 16),
 
-                // Unlock Button
                 ElevatedButton(
                   onPressed: _checkCode,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[700], // Old paper feel
+                    backgroundColor: Colors.brown[700],
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                     textStyle: TextStyle(fontSize: 18),
@@ -136,7 +134,6 @@ class _ArticlePageState extends State<ArticlePage> {
 
                 SizedBox(height: 16),
 
-                // Incorrect Code Message
                 Text(
                   message,
                   style: TextStyle(fontSize: 16, color: Colors.red),
@@ -149,25 +146,24 @@ class _ArticlePageState extends State<ArticlePage> {
     );
   }
 
-  /// **Helper function to format bold text inside the article text**
   List<TextSpan> _formatArticleText(String text) {
     List<TextSpan> spans = [];
-    RegExp exp = RegExp(r'\*\*(.*?)\*\*'); // Matches **bold text**
+    RegExp exp = RegExp(r'\*\*(.*?)\*\*');
     Iterable<RegExpMatch> matches = exp.allMatches(text);
 
     int lastIndex = 0;
     for (RegExpMatch match in matches) {
       if (match.start > lastIndex) {
-        spans.add(TextSpan(text: text.substring(lastIndex, match.start))); // Normal text
+        spans.add(TextSpan(text: text.substring(lastIndex, match.start)));
       }
       spans.add(TextSpan(
-        text: match.group(1), // Bold text
+        text: match.group(1),
         style: TextStyle(fontWeight: FontWeight.bold),
       ));
       lastIndex = match.end;
     }
     if (lastIndex < text.length) {
-      spans.add(TextSpan(text: text.substring(lastIndex))); // Remaining normal text
+      spans.add(TextSpan(text: text.substring(lastIndex)));
     }
 
     return spans;
