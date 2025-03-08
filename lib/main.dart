@@ -87,12 +87,12 @@ class _MapImagePageState extends State<MapImagePage> {
     },
   ];
 
-  void unlockNextLevel() async {
+void unlockNextLevel() async {
   if (currentLevel < relativePositions.length - 1) {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => BlankPage()), // Wait for BlankPage to close
-    ); 
+      MaterialPageRoute(builder: (context) => BlankPage(gameType: currentLevel + 1)), // Assigns game placeholder
+    );
 
     setState(() {
       currentLevel++;
@@ -102,6 +102,11 @@ class _MapImagePageState extends State<MapImagePage> {
       );
     });
   } else {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BlankPage(gameType: 3)), // Placeholder for final game
+    );
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

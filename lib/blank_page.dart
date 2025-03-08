@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BlankPage extends StatelessWidget {
+  final int gameType; // Determines which placeholder to display
+
+  BlankPage({required this.gameType});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,11 +18,10 @@ class BlankPage extends StatelessWidget {
             ),
           ),
 
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          Center(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Transform.scale(
                   scaleY: -1, 
@@ -30,11 +33,12 @@ class BlankPage extends StatelessWidget {
 
                 SizedBox(height: 16),
 
+                // Placeholder for future games
                 Text(
-                  "A New Path Awaits...",
+                  "Game ${gameType} Placeholder",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.medievalSharp(
-                    fontSize: 28,
+                    fontSize: 24,
                     color: const Color.fromARGB(255, 31, 20, 18),
                     fontWeight: FontWeight.bold,
                   ),
