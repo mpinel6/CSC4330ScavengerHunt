@@ -29,7 +29,6 @@ class _MapImagePageState extends State<MapImagePage> {
   final double mapWidth = 2000; 
   final double mapHeight = 800;
 
-  // Relative positions for buttons & markers
   final List<Offset> relativePositions = [
     Offset(0.08, 0.26),
     Offset(0.22, 0.24),

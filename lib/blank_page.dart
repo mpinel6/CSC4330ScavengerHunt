@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BlankPage extends StatelessWidget {
-  final int gameType; // Determines which placeholder to display
+  final int gameType;
 
   BlankPage({required this.gameType});
 

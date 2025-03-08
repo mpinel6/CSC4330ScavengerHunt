@@ -163,22 +163,22 @@ class _ArticlePageState extends State<ArticlePage> {
   /// Helper function to format bold text inside the article text
   List<TextSpan> _formatArticleText(String text) {
     List<TextSpan> spans = [];
-    RegExp exp = RegExp(r'\*\*(.*?)\*\*'); // Matches **bold text**
+    RegExp exp = RegExp(r'\*\*(.*?)\*\*');
     Iterable<RegExpMatch> matches = exp.allMatches(text);
 
     int lastIndex = 0;
     for (RegExpMatch match in matches) {
       if (match.start > lastIndex) {
-        spans.add(TextSpan(text: text.substring(lastIndex, match.start))); // Normal text
+        spans.add(TextSpan(text: text.substring(lastIndex, match.start))); 
       }
       spans.add(TextSpan(
-        text: match.group(1), // Bold text
+        text: match.group(1), 
         style: TextStyle(fontWeight: FontWeight.bold),
       ));
       lastIndex = match.end;
     }
     if (lastIndex < text.length) {
-      spans.add(TextSpan(text: text.substring(lastIndex))); // Remaining normal text
+      spans.add(TextSpan(text: text.substring(lastIndex))); 
     }
 
     return spans;

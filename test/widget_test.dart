@@ -8,7 +8,6 @@ void main() {
   testWidgets('MapImagePage displays map image, button, and player marker', (WidgetTester tester) async {
     await tester.pumpWidget(MyApp());
 
-    // Check if map image exists
     expect(
       find.byWidgetPredicate((widget) {
         if (widget is Image && widget.image is AssetImage) {
@@ -19,7 +18,6 @@ void main() {
       findsOneWidget,
     );
 
-    // Check if button exists
     expect(
       find.byWidgetPredicate((widget) {
         if (widget is Image && widget.image is AssetImage) {
@@ -30,7 +28,6 @@ void main() {
       findsOneWidget,
     );
 
-    // Check if player marker (tiger) exists
     expect(
       find.byWidgetPredicate((widget) {
         if (widget is Image && widget.image is AssetImage) {
@@ -41,7 +38,6 @@ void main() {
       findsOneWidget,
     );
 
-    // Check if scrollbar exists (for horizontal scrolling)
     expect(find.byType(Scrollbar), findsOneWidget);
   });
 
@@ -101,8 +97,8 @@ void main() {
     final newButtonOffset = tester.getTopLeft(buttonFinder);
     final newTigerOffset = tester.getTopLeft(tigerFinder);
 
-    expect(newButtonOffset, isNot(equals(initialButtonOffset))); // Button moved
-    expect(newTigerOffset, isNot(equals(initialTigerOffset))); // Tiger marker moved
+    expect(newButtonOffset, isNot(equals(initialButtonOffset))); 
+    expect(newTigerOffset, isNot(equals(initialTigerOffset))); 
   });
 
   testWidgets('BlankPage appears after unlocking a code', (WidgetTester tester) async {
@@ -124,6 +120,6 @@ void main() {
     await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(BlankPage), findsNothing); // Blank page should close
+    expect(find.byType(BlankPage), findsNothing); 
   });
 }
