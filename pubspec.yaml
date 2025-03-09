@@ -68,6 +68,7 @@ flutter:
     - images/article3.png
     - images/background_image.png
     - images/divider.png
+    - images/slime.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
