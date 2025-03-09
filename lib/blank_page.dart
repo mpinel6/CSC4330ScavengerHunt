@@ -256,7 +256,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                         ]),
                         builder: (context, child) {
                           //Calculate obstacle position
-                          double obstacleLeft = 300 - 60 - _obstacleX.value;
+                          double obstacleLeft = 300 - 20 - _obstacleX.value;
 
                           return Stack(
                             clipBehavior: Clip.none,
