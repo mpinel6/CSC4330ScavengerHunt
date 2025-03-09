@@ -310,8 +310,8 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                     const SizedBox(height: 4),
                                     Image.asset(
                                       'images/slime.gif',
-                                      width: 60,
-                                      height: 60,
+                                      width: 80,
+                                      height: 80,
                                       gaplessPlayback: true,
                                     ),
                                   ],
