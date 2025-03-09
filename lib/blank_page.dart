@@ -194,7 +194,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       'Typing Tiger Game',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 24,
-                        color: Color.fromARGB(255, 31, 20, 18),
+                        color: const Color.fromARGB(255, 31, 20, 18),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -203,7 +203,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       'Type the word before the enemies reach you!',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 18,
-                        color: Color.fromARGB(255, 31, 20, 18),
+                        color: const Color.fromARGB(255, 31, 20, 18),
                       ),
                     ),
                   ] else ...[
@@ -211,7 +211,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       'You did it! All enemies destroyed!',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 24,
-                        color: Color.fromARGB(255, 31, 20, 18),
+                        color: const Color.fromARGB(255, 31, 20, 18),
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
@@ -222,7 +222,9 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[700],
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 12
+                        ),
                         textStyle: GoogleFonts.medievalSharp(fontSize: 20),
                       ),
                       child: const Text('Continue'),
@@ -259,10 +261,10 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                 ),
                               ),
                               Positioned(
-                                left: 120,
-                                bottom: 40,
+                                left: 70,      // X-position of typed text
+                                bottom: 60,    // Y-position of typed text
                                 child: Container(
-                                  width: 60,
+                                  width: 200,   
                                   alignment: Alignment.center,
                                   child: Text(
                                     typedSoFar,
@@ -316,7 +318,8 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[700],
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 12),
                         textStyle: GoogleFonts.medievalSharp(fontSize: 20),
                       ),
                       child: const Text('Back to Map'),
