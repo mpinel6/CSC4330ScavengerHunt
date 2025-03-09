@@ -12,6 +12,12 @@ class BlankPage extends StatefulWidget {
 }
 
 class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
+  final List<String> wordPool = [
+    'TIGER', 'ROAR', 'LSU', 'JUNGLE', 'CLAW',
+    'PAWS', 'SWIFT', 'FOCUS', 'STRIKE', 'STRIPES',
+    'PROWL', 'SPIRIT'
+  ];
+
   late List<String> words;
   int obstacleIndex = 0;
   late String currentWord;
@@ -31,13 +37,18 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    words = ['TIGER', 'ROAR', 'LSU'];
 
+    final random = math.Random();
+    words = List.generate(3, (index) {
+      return wordPool[random.nextInt(wordPool.length)];
+    });
+
+    obstacleIndex = 0;
     currentWord = words[obstacleIndex];
 
     _jumpController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 600),
     );
     _jumpAnimation = Tween<double>(begin: 0, end: 100).animate(
       CurvedAnimation(parent: _jumpController, curve: Curves.easeInOut),
@@ -63,9 +74,8 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
 
     _obstacleController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 6),
+      duration: const Duration(seconds: 6),
     );
-
 
     _obstacleX = Tween<double>(begin: 0, end: 240).animate(
       CurvedAnimation(parent: _obstacleController, curve: Curves.linear),
@@ -73,7 +83,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
 
     _obstacleX.addStatusListener((status) {
       if (status == AnimationStatus.completed && !isJumping && !gameFinished) {
-        //need to implement restarting the game
+        restartGame();
       }
     });
 
@@ -90,8 +100,34 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
 
   void checkTyping() {
     if (typedSoFar.toUpperCase() == currentWord.toUpperCase()) {
-      //need to implement tiger animation :)
+      triggerJump();
     }
+  }
+
+  void triggerJump() {
+    setState(() {
+      isJumping = true;
+    });
+    _jumpController.forward(from: 0);
+  }
+
+  void restartGame() {
+    setState(() {
+      final random = math.Random();
+      words = List.generate(3, (index) {
+        return wordPool[random.nextInt(wordPool.length)];
+      });
+
+      obstacleIndex = 0;
+      currentWord = words[obstacleIndex];
+      typedSoFar = '';
+      gameFinished = false;
+      isJumping = false;
+
+      _jumpController.reset();
+      _obstacleController.reset();
+      _obstacleController.forward();
+    });
   }
 
   KeyEventResult handleKeyEvent(FocusNode node, KeyEvent event) {
@@ -99,8 +135,6 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
 
     if (event is KeyDownEvent) {
       final String? character = event.character;
-
-
       if (character != null && character.isNotEmpty) {
         if (character.length == 1) {
           setState(() {
@@ -112,7 +146,6 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
           checkTyping();
         }
       }
-
 
       if (event.physicalKey == PhysicalKeyboardKey.backspace && typedSoFar.isNotEmpty) {
         setState(() {
@@ -139,8 +172,6 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                 fit: BoxFit.cover,
               ),
             ),
-
-
             Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -153,24 +184,23 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       width: 300,
                     ),
                   ),
-                  SizedBox(height: 16),
-
+                  const SizedBox(height: 16),
 
                   if (!gameFinished) ...[
                     Text(
                       'Typing Tiger Game',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 24,
-                        color: Color.fromARGB(255, 31, 20, 18),
+                        color: const Color.fromARGB(255, 31, 20, 18),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       'Type the word before the enemies reach you!',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 18,
-                        color: Color.fromARGB(255, 31, 20, 18),
+                        color: const Color.fromARGB(255, 31, 20, 18),
                       ),
                     ),
                   ] else ...[
@@ -178,25 +208,25 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       'You did it! All enemies destroyed!',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 24,
-                        color: Color.fromARGB(255, 31, 20, 18),
+                        color: const Color.fromARGB(255, 31, 20, 18),
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[700],
                         foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                         textStyle: GoogleFonts.medievalSharp(fontSize: 20),
                       ),
-                      child: Text('Continue'),
+                      child: const Text('Continue'),
                     ),
                   ],
-                  SizedBox(height: 16),
-
+                  const SizedBox(height: 16),
 
                   if (!gameFinished)
                     SizedBox(
@@ -206,7 +236,6 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                         animation: Listenable.merge([_jumpAnimation, _obstacleX]),
                         builder: (context, child) {
                           double obstacleLeft = 300 - 60 - _obstacleX.value;
-
 
                           return Stack(
                             clipBehavior: Clip.none,
@@ -220,8 +249,6 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                   height: 60,
                                 ),
                               ),
-
-
                               Positioned(
                                 left: 120,
                                 bottom: 40,
@@ -239,8 +266,6 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                   ),
                                 ),
                               ),
-
-
                               Positioned(
                                 left: obstacleLeft,
                                 bottom: 0,
@@ -255,7 +280,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(height: 4),
+                                    const SizedBox(height: 4),
                                     Image.asset(
                                       'images/button_image.png',
                                       width: 60,
@@ -269,26 +294,23 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                         },
                       ),
                     ),
-
-                  SizedBox(height: 24),
-
+                  const SizedBox(height: 24),
                   Image.asset(
                     'images/divider.png',
                     width: 300,
                   ),
-                  SizedBox(height: 20),
-
-
+                  const SizedBox(height: 20),
                   if (!gameFinished)
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[700],
                         foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                         textStyle: GoogleFonts.medievalSharp(fontSize: 20),
                       ),
-                      child: Text('Back to Map'),
+                      child: const Text('Back to Map'),
                     ),
                 ],
               ),
@@ -299,6 +321,3 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
     );
   }
 }
-
-
-
