@@ -219,8 +219,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[700],
                         foregroundColor: Colors.white,
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                         textStyle: GoogleFonts.medievalSharp(fontSize: 20),
                       ),
                       child: const Text('Continue'),
@@ -243,10 +242,14 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                               Positioned(
                                 left: 0,
                                 bottom: 0 + _jumpAnimation.value,
-                                child: Image.asset(
-                                  'images/Tiger_marker.png',
-                                  width: 60,
-                                  height: 60,
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  transform: Matrix4.rotationY(math.pi),
+                                  child: Image.asset(
+                                    'images/Tiger_marker.png',
+                                    width: 60,
+                                    height: 60,
+                                  ),
                                 ),
                               ),
                               Positioned(
@@ -306,8 +309,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.brown[700],
                         foregroundColor: Colors.white,
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                         textStyle: GoogleFonts.medievalSharp(fontSize: 20),
                       ),
                       child: const Text('Back to Map'),
