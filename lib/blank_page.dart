@@ -269,15 +269,15 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                   transform: Matrix4.rotationY(math.pi),
                                   child: Image.asset(
                                     'images/Tiger_marker.png',
-                                    width: 60,
-                                    height: 60,
+                                    width: 90,
+                                    height: 90,
                                   ),
                                 ),
                               ),
                               //typed user text
                               Positioned(
-                                left: 70,
-                                bottom: 60,
+                                left: 60,
+                                bottom: 120,
                                 child: Container(
                                   width: 200,
                                   alignment: Alignment.center,
