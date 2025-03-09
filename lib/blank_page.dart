@@ -285,7 +285,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                     ),
                                     const SizedBox(height: 4),
                                     Image.asset(
-                                      'images/button_image.png',
+                                      'images/slime.gif',
                                       width: 60,
                                       height: 60,
                                     ),
