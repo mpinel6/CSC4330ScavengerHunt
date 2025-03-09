@@ -12,35 +12,39 @@ class BlankPage extends StatefulWidget {
 }
 
 class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
+  //words to pick from
   final List<String> wordPool = [
     'TIGER', 'ROAR', 'LSU', 'JUNGLE', 'CLAW',
     'PAWS', 'SWIFT', 'FOCUS', 'STRIKE', 'STRIPES',
-    'PROWL', 'SPIRIT', 'CHAMPION', 'STUDY', 
+    'PROWL', 'SPIRIT', 'CHAMPION', 'STUDY',
   ];
 
-  late List<String> words;
-  int obstacleIndex = 0;
-  late String currentWord;
-  String typedSoFar = '';
+  late List<String> words; //selected words
+  int obstacleIndex = 0; //current obstacle
+  late String currentWord; //word to type
+  String typedSoFar = ''; //typing progress
 
+  // Jump animations
   late AnimationController _jumpController;
   late Animation<double> _jumpAnimation;
   bool isJumping = false;
 
+  // Enemy animations
   late AnimationController _obstacleController;
   late Animation<double> _obstacleX;
 
   bool gameFinished = false;
 
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode(); //keyboard focus
 
   @override
   void initState() {
     super.initState();
-    _setupGame();
+    _setupGame(); //initial setup
   }
 
   void _setupGame() {
+    //shuffle and pick words
     final random = math.Random();
     final shuffledPool = List<String>.from(wordPool)..shuffle(random);
     words = shuffledPool.take(3).toList();
@@ -48,7 +52,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
     obstacleIndex = 0;
     currentWord = words[obstacleIndex];
 
-    // Jump animation
+    //jump controller
     _jumpController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -75,7 +79,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
       }
     });
 
-    // Enemy animation
+    //enemy controller
     _obstacleController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 6),
@@ -96,6 +100,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    //cleanup
     _jumpController.dispose();
     _obstacleController.dispose();
     _focusNode.dispose();
@@ -103,12 +108,14 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
   }
 
   void checkTyping() {
+    //match typed with current
     if (typedSoFar.toUpperCase() == currentWord.toUpperCase()) {
       triggerJump();
     }
   }
 
   void triggerJump() {
+    //tiger jumps
     setState(() {
       isJumping = true;
     });
@@ -116,6 +123,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
   }
 
   void restartGame() {
+    //reset everything in game
     setState(() {
       final random = math.Random();
       final shuffledPool = List<String>.from(wordPool)..shuffle(random);
@@ -134,6 +142,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
   }
 
   KeyEventResult handleKeyEvent(FocusNode node, KeyEvent event) {
+    //capture keystrokes
     if (gameFinished) return KeyEventResult.ignored;
 
     if (event is KeyDownEvent) {
@@ -169,6 +178,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
         onKeyEvent: handleKeyEvent,
         child: Stack(
           children: [
+            //background
             Positioned.fill(
               child: Image.asset(
                 'images/background_image.png',
@@ -180,6 +190,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  //divider (flipped)
                   Transform.scale(
                     scaleY: -1,
                     child: Image.asset(
@@ -189,6 +200,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                   ),
                   const SizedBox(height: 16),
 
+                  //Game Title + End Screen
                   if (!gameFinished) ...[
                     Text(
                       'Typing Tiger Game',
@@ -232,6 +244,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                   ],
                   const SizedBox(height: 16),
 
+                  //tiger, typed text, and enemy
                   if (!gameFinished)
                     SizedBox(
                       width: 300,
@@ -242,6 +255,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                           _obstacleX,
                         ]),
                         builder: (context, child) {
+                          //Calculate obstacle position
                           double obstacleLeft = 300 - 60 - _obstacleX.value;
 
                           return Stack(
@@ -260,11 +274,12 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                   ),
                                 ),
                               ),
+                              //typed user text
                               Positioned(
-                                left: 70,      // X-position of typed text
-                                bottom: 60,    // Y-position of typed text
+                                left: 70,
+                                bottom: 60,
                                 child: Container(
-                                  width: 200,   
+                                  width: 200,
                                   alignment: Alignment.center,
                                   child: Text(
                                     typedSoFar,
@@ -277,6 +292,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                   ),
                                 ),
                               ),
+                              //Enemy
                               Positioned(
                                 left: obstacleLeft,
                                 bottom: 0,
@@ -307,11 +323,13 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       ),
                     ),
                   const SizedBox(height: 24),
+                  //Bottom divider
                   Image.asset(
                     'images/divider.png',
                     width: 300,
                   ),
                   const SizedBox(height: 20),
+                  //back to map
                   if (!gameFinished)
                     ElevatedButton(
                       onPressed: () => Navigator.pop(context),
@@ -319,7 +337,8 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                         backgroundColor: Colors.brown[700],
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 12),
+                          horizontal: 32, vertical: 12
+                        ),
                         textStyle: GoogleFonts.medievalSharp(fontSize: 20),
                       ),
                       child: const Text('Back to Map'),
