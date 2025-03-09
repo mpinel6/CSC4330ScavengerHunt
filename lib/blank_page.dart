@@ -37,15 +37,18 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _setupGame();
+  }
 
+  void _setupGame() {
     final random = math.Random();
-    words = List.generate(3, (index) {
-      return wordPool[random.nextInt(wordPool.length)];
-    });
+    final shuffledPool = List<String>.from(wordPool)..shuffle(random);
+    words = shuffledPool.take(3).toList();
 
     obstacleIndex = 0;
     currentWord = words[obstacleIndex];
 
+    // Jump animation
     _jumpController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -72,6 +75,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
       }
     });
 
+    // Enemy animation
     _obstacleController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 6),
@@ -114,9 +118,8 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
   void restartGame() {
     setState(() {
       final random = math.Random();
-      words = List.generate(3, (index) {
-        return wordPool[random.nextInt(wordPool.length)];
-      });
+      final shuffledPool = List<String>.from(wordPool)..shuffle(random);
+      words = shuffledPool.take(3).toList();
 
       obstacleIndex = 0;
       currentWord = words[obstacleIndex];
@@ -191,7 +194,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       'Typing Tiger Game',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 24,
-                        color: const Color.fromARGB(255, 31, 20, 18),
+                        color: Color.fromARGB(255, 31, 20, 18),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -200,7 +203,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       'Type the word before the enemies reach you!',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 18,
-                        color: const Color.fromARGB(255, 31, 20, 18),
+                        color: Color.fromARGB(255, 31, 20, 18),
                       ),
                     ),
                   ] else ...[
@@ -208,7 +211,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       'You did it! All enemies destroyed!',
                       style: GoogleFonts.medievalSharp(
                         fontSize: 24,
-                        color: const Color.fromARGB(255, 31, 20, 18),
+                        color: Color.fromARGB(255, 31, 20, 18),
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
@@ -232,7 +235,10 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                       width: 300,
                       height: 150,
                       child: AnimatedBuilder(
-                        animation: Listenable.merge([_jumpAnimation, _obstacleX]),
+                        animation: Listenable.merge([
+                          _jumpAnimation,
+                          _obstacleX,
+                        ]),
                         builder: (context, child) {
                           double obstacleLeft = 300 - 60 - _obstacleX.value;
 
@@ -288,6 +294,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
                                       'images/slime.gif',
                                       width: 60,
                                       height: 60,
+                                      gaplessPlayback: true,
                                     ),
                                   ],
                                 ),
