@@ -15,7 +15,7 @@ class _BlankPageState extends State<BlankPage> with TickerProviderStateMixin {
   final List<String> wordPool = [
     'TIGER', 'ROAR', 'LSU', 'JUNGLE', 'CLAW',
     'PAWS', 'SWIFT', 'FOCUS', 'STRIKE', 'STRIPES',
-    'PROWL', 'SPIRIT'
+    'PROWL', 'SPIRIT', 'CHAMPION', 'STUDY', 
   ];
 
   late List<String> words;
